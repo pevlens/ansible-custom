@@ -1,0 +1,44 @@
+---
+# tasks file for build_and_push_docker
+
+
+# Логин в Nexus Docker registry
+- name: Log in to Nexus Docker registry
+  ansible.builtin.shell: |
+    docker login -u {{ nexus_user }} -p {{ nexus_password }} {{ nexus_repository_url }}
+  register: login_output
+  changed_when: False
+
+# Git pull with repo
+- name: git pull app
+  ansible.builtin.git:
+    repo: "{{ git_repo_url }}"
+    dest: "{{ git_clone_dest }}"
+    version: "{{ git_version }}"
+    force: yes
+  register: git_clone
+  
+# Сборка Docker-образа
+- name: Build Docker image
+  ansible.builtin.docker_image:
+    path: "{{ dockerfile_path }}"                # Путь к директории с Dockerfile
+    name: "{{ docker_image_name }}"
+    tag: "{{ docker_image_tag }}"
+  register: docker_build
+
+# Тегирование Docker-образа для Nexus
+- name: Tag Docker image for Nexus
+  ansible.builtin.shell: |
+    docker tag {{ docker_image_name }}:{{ docker_image_tag }} {{ nexus_repository_url }}/{{ nexus_repo }}/{{ docker_image_name }}:{{ docker_image_tag }}
+
+# Пуш Docker-образа в Nexus
+- name: Push Docker image to Nexus
+  ansible.builtin.shell: |
+    docker push {{ nexus_repository_url }}/{{ nexus_repo }}/{{ docker_image_name }}:{{ docker_image_tag }}
+  register: push_output
+
+# Разлогиниваемся из Nexus Docker registry
+- name: Log out from Nexus Docker registry
+  ansible.builtin.shell: |
+    docker logout {{ nexus_repository_url }}
+  changed_when: False

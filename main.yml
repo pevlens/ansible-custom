@@ -1,0 +1,16 @@
+---
+- name: Build and push Docker image to Nexus using a role
+  hosts: localhost  # или замените на нужный хост
+  roles:
+    - build_and_push_docker
+  vars:
+    docker_image_name: "myapp"                     # Имя Docker-образа
+    docker_image_tag: "latest"                       # Тег Docker-образа
+    nexus_repository_url: "{{ lookup('env', 'NEXUSURI') }}"      # URL вашего Nexus репозитория
+    nexus_user: "{{ lookup('env', 'NEXUSUSER') }}"              # Имя пользователя Nexus
+    nexus_password: "{{ lookup('env', 'NEXUSPASS') }}"          # Пароль от Nexus
+    nexus_repo: "docker"                     # Имя репозитория в Nexus
+    dockerfile_path: "."                           # Путь к Dockerfile
+    git_repo_url: "https://github.com/pevlens/test.git"  # URL Git-репозитория
+    git_version: "main"                                # Ветка или тег для выкачивания (например, main, master, или версия v1.0)
+    git_clone_dest: "."                       # Путь, куда будет клонирован репозиторий
