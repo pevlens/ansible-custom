@@ -1,7 +1,30 @@
 ---
 # tasks file for build_and_push_docker
 
+- name: Ensure /etc/docker directory exists
+  ansible.builtin.file:
+    path: /etc/docker
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
 
+- name: Configure Docker daemon.json for insecure registry
+  ansible.builtin.copy:
+    dest: /etc/docker/daemon.json
+    content: |
+      {
+        "insecure-registries" : ["{{ nexus_repository_url }}"]
+      }
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Dockerd start
+  ansible.builtin.shell: |
+    dockerd --host=unix:///var/run/docker.sock > dockerd.log 2>&1 &
+  register: dockerd_start
+  changed_when: False
 # Логин в Nexus Docker registry
 - name: Log in to Nexus Docker registry
   ansible.builtin.shell: |
