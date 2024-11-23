@@ -28,7 +28,7 @@
 # Логин в Nexus Docker registry
 - name: Log in to Nexus Docker registry
   ansible.builtin.shell: |
-    docker login -u {{ nexus_user }} -p {{ nexus_password }} {{ nexus_repository_url }} --tls-verify=false
+    docker login -u {{ nexus_user }} -p {{ nexus_password }} {{ nexus_repository_url }}
   register: login_output
   changed_when: False
 
@@ -57,7 +57,7 @@
 # Пуш Docker-образа в Nexus
 - name: Push Docker image to Nexus
   ansible.builtin.shell: |
-    docker push {{ nexus_repository_url }}/{{ nexus_repo }}/{{ docker_image_name }}:{{ docker_image_tag }} --tls-verify=false
+    docker push {{ nexus_repository_url }}/{{ nexus_repo }}/{{ docker_image_name }}:{{ docker_image_tag }} 
   register: push_output
 
 # Разлогиниваемся из Nexus Docker registry
