@@ -2,7 +2,8 @@
 - name: Build and push Docker image to Nexus using a role
   hosts: localhost  # или замените на нужный хост
   roles:
-    - build_and_push_docker
+    - {role: build_and_push_docker, tags: build}
+    - {role: k8s_apply_deployment, tags: deploy}
   vars:
     docker_image_name: "myapp"                     # Имя Docker-образа
     docker_image_tag: "latest"                       # Тег Docker-образа
