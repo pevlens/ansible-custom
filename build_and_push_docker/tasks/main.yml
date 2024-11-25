@@ -43,7 +43,7 @@
   
 - name: stdout git_clone
   debug:
-    var: git_clone.stdout  
+    var: git_clone
 
 # Сборка Docker-образа
 - name: Build Docker image
