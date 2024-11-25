@@ -53,10 +53,8 @@
 
 # Сборка Docker-образа
 - name: Build Docker image
-  ansible.builtin.docker_image:
-    path: "{{ dockerfile_path }}"                # Путь к директории с Dockerfile
-    name: "{{ docker_image_name }}"
-    tag: "{{ docker_image_tag }}"
+  ansible.builtin.shell: |
+    docker build -t {{ docker_image_name }}:{{ docker_image_tag }} {{docdockerfile_path}}
   register: docker_build
 
 # Тегирование Docker-образа для Nexus
