@@ -14,7 +14,7 @@
     dest: /etc/docker/daemon.json
     content: |
       {
-        "insecure-registries" : ["{{ nexus_repository_url }}"]
+        "insecure-registries" : ["{{nexus_repository_url}}","{{ nexus_repository_url }}:443"]
       }
     owner: root
     group: root
@@ -26,7 +26,7 @@
   register: dockerd_start
   changed_when: False
 # Логин в Nexus Docker registry
-- name: Log in to Nexus Docker registry
+- name: Login to Nexus Docker registry
   ansible.builtin.shell: |
     docker login -u {{ nexus_user }} -p {{ nexus_password }} {{ nexus_repository_url }}
   register: login_output
