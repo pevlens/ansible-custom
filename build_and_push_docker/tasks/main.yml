@@ -41,6 +41,10 @@
     force: yes
   register: git_clone
   
+- name: stdout git_clone
+  debug:
+    var: git_clone.stdout  
+
 # Сборка Docker-образа
 - name: Build Docker image
   ansible.builtin.docker_image:
