@@ -28,7 +28,7 @@
 # Логин в Nexus Docker registry
 - name: Login to Nexus Docker registry
   ansible.builtin.shell: |
-    docker login -u {{ nexus_user }} -p {{ nexus_password }} {{ nexus_repository_url }}
+    docker login -u {{ nexus_user }} -p {{ nexus_password }} {{ nexus_repository_url }}:443
   register: login_output
   changed_when: False
 
