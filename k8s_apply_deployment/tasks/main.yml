@@ -1,11 +1,14 @@
 ---
 # tasks file for k8s_apply_deployment
-
-- name: Install Kubernetes Ansible collection
-  ansible.builtin.ansible.builtin.ansible-galaxy:
-    name: kubernetes.core
-    type: collection
-    state: latest
+- name: pip install k8.core
+  ansible.builtin.pip:
+    name:
+      - kubernetes
+      - openshift
+      - kubernetes-asyncio
+    state: present
+    executable: pip3
+  become: yes
 
 - name: Ensure namespace exists
   kubernetes.core.k8s:
