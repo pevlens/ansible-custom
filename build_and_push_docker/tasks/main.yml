@@ -42,7 +42,8 @@
   register: git_clone
   
 - name: ls regestry
-  command: ls
+  ansible.builtin.shell: |
+    pwd && ls
   register: ls_output
   changed_when: False
 
