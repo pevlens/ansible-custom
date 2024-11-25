@@ -60,12 +60,12 @@
 # Тегирование Docker-образа для Nexus
 - name: Tag Docker image for Nexus
   ansible.builtin.shell: |
-    docker tag {{ docker_image_name }}:{{ docker_image_tag }} {{ nexus_repository_url }}/{{ nexus_repo }}/{{ docker_image_name }}:{{ docker_image_tag }}
+    docker tag {{ docker_image_name }}:{{ docker_image_tag }} {{ nexus_repository_url }}:443/{{ nexus_repo }}/{{ docker_image_name }}:{{ docker_image_tag }}
 
 # Пуш Docker-образа в Nexus
 - name: Push Docker image to Nexus
   ansible.builtin.shell: |
-    docker push {{ nexus_repository_url }}/{{ nexus_repo }}/{{ docker_image_name }}:{{ docker_image_tag }} 
+    docker push {{ nexus_repository_url }}:443/{{ nexus_repo }}/{{ docker_image_name }}:{{ docker_image_tag }} 
   register: push_output
 
 # Разлогиниваемся из Nexus Docker registry
