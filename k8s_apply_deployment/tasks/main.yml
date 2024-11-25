@@ -1,6 +1,12 @@
 ---
 # tasks file for k8s_apply_deployment
 
+- name: Install Kubernetes Ansible collection
+  ansible.builtin.ansible.builtin.ansible-galaxy:
+    name: kubernetes.core
+    type: collection
+    state: latest
+
 - name: Ensure namespace exists
   kubernetes.core.k8s:
     kubeconfig: "{{ kubeconfig_path }}"
