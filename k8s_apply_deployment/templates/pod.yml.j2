@@ -8,4 +8,4 @@ spec:
     - name: {{name_app}}
       image: {{nexus_repository_url}}/{{nexus_repo}}/{{name_app}}:{{docker_image_tag}}
   imagePullSecrets:
-    - name: nexus-docker-secret-2
+    - name: {{secret_name}}

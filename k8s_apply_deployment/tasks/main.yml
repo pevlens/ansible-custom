@@ -10,6 +10,21 @@
       metadata:
         name: "{{ namespace }}"
 
+- name: Create secret Docker regestry
+  kubernetes.core.k8s:
+    kubeconfig: "{{ kubeconfig_path }}"
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: "{{secret_name}}"
+        namespace: "{{ namespace }}"
+      type: kubernetes.io/dockerconfigjson
+      data:
+        .dockerconfigjson: "{{ docker_config_json }}"
+
+
 - name: Apply k8s pod
   kubernetes.core.k8s:
     kubeconfig: "{{ kubeconfig_path }}"

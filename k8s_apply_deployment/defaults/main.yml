@@ -2,3 +2,4 @@
 # defaults file for k8s_apply_deployment
 
 kubeconfig_path: "/etc/kube/config/config"
+secret_name: "nexus-docker-secret-2"

@@ -1,2 +1,13 @@
 ---
 # vars file for k8s_apply_deployment
+docker_auth: "{{ nexus_user | b64encode }}:{{ nexus_password | b64encode }}"
+docker_config_json: |
+  {
+    "auths": {
+      "{{ nexus_repository_url }}": {
+        "username": "{{ nexus_user }}",
+        "password": "{{ nexus_password }}",
+        "auth": "{{ docker_auth }}"
+      }
+    }
+  }
