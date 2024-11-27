@@ -1,15 +1,5 @@
 ---
 # tasks file for k8s_apply_deployment
-- name: pip install k8.core
-  ansible.builtin.pip:
-    name:
-      - kubernetes
-      - openshift
-      - kubernetes-asyncio
-    state: present
-    executable: pip3
-
-
 - name: Ensure namespace exists
   kubernetes.core.k8s:
     kubeconfig: "{{ kubeconfig_path }}"
