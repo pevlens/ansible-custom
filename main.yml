@@ -6,7 +6,7 @@
     - {role: k8s_apply_deployment, tags: deploy}
   vars:
     docker_image_name: "myapp"                     # Имя Docker-образа
-    docker_image_tag: "latest"                       # Тег Docker-образа
+    docker_image_tag: "v27"                       # Тег Docker-образа
     nexus_repository_url: "{{ lookup('env', 'NEXUSURI') }}"      # URL вашего Nexus репозитория
     nexus_user: "{{ lookup('env', 'NEXUSUSER') }}"              # Имя пользователя Nexus
     nexus_password: "{{ lookup('env', 'NEXUSPASS') }}"          # Пароль от Nexus
