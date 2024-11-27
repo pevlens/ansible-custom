@@ -22,7 +22,7 @@
         namespace: "{{ namespace }}"
       type: kubernetes.io/dockerconfigjson
       data:
-        .dockerconfigjson: "{{ docker_config_json }}"
+        .dockerconfigjson: "{{ docker_config_json | to_json | b64encode }}"
 
 
 - name: Apply k8s pod
