@@ -5,7 +5,7 @@ metadata:
   namespace: {{namespace}}
 spec:
   containers:
-    - name: {{name-app}}
-      image: {{nexus_repository_url}}/{{nexus_repo}}/{{name-app}}:{{docker_image_tag}}
+    - name: {{name_app}}
+      image: {{nexus_repository_url}}/{{nexus_repo}}/{{name_app}}:{{docker_image_tag}}
   imagePullSecrets:
     - name: nexus-docker-secret-2
