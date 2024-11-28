@@ -39,12 +39,30 @@
     name: "{{name_app}}"
   register: pod_info
 
-- name: Debug Pod info
-  debug:
-    var: pod_info
-
 - name: Wait for Pod to become Running
-  retries: 10
-  delay: 10
   until: pod_info.resources[0].status.phase == "Running"
-  command: /bin/true
+  retries: 10             # Количество попыток
+  delay: 10                  # Задержка между попытками в секундах
+  register: pod_info                    # Регистрируем данные о Pod
+  ignore_errors: true                   # Игнорируем ошибки на время ожидания
+  block:
+    - name: Get Pod details
+      kubernetes.core.k8s_info:
+        kubeconfig: "{{ kubeconfig_path }}"
+        kind: Pod
+        namespace: "{{ namespace }}"
+        name: "{{ name_app }}"
+      register: pod_info
+
+    - name: Debug Pod status
+      debug:
+        var: pod_info.resources[0].status.phase
+
+- name: Final check for Pod status
+  fail:
+    msg: "Pod {{ name_app }} did not reach 'Running' state within the timeout. Current status: {{ pod_info.resources[0].status.phase }}"
+  when: pod_info.resources[0].status.phase != "Running"
+
+- name: Confirm Pod is Running
+  debug:
+    msg: "Pod {{ name_app }} is successfully running."
