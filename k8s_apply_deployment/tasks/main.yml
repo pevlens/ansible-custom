@@ -30,3 +30,21 @@
     kubeconfig: "{{ kubeconfig_path }}"
     state: present
     definition: "{{ lookup('template', 'pod.yml.j2') }}"
+
+- name: Get Pod details
+  kubernetes.core.k8s_info:
+    kubeconfig: "{{ kubeconfig_path }}"
+    kind: Pod
+    namespace: "{{ namespace }}"
+    name: "{{name_app}}"
+    register: pod_info
+
+- name: Debug Pod info
+  debug:
+    var: pod_info
+
+- name: Wait for Pod to become Running
+  retries: 10
+  delay: 10
+  until: pod_info.resources[0].status.phase == "Running"
+  command: /bin/true
