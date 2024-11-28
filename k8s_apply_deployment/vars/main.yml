@@ -1,6 +1,6 @@
 ---
 # vars file for k8s_apply_deployment
-docker_auth: "{{(docker_username +':'+ docker_password) | b64encode }}"
+docker_auth: "{{ (docker_username + ':' + docker_password) | b64encode }}"
 docker_config_json: |
   {
     "auths": {
