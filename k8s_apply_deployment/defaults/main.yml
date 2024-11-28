@@ -3,3 +3,4 @@
 
 kubeconfig_path: "/etc/kube/config/config"
 secret_name: "nexus-docker-secret-2"
+nexus_repository_url_worker: "nexus.psn.by"

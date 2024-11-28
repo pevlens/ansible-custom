@@ -6,6 +6,6 @@ metadata:
 spec:
   containers:
     - name: {{name_app}}
-      image: {{nexus_repository_url}}/{{nexus_repo}}/{{name_app}}:{{docker_image_tag}}
+      image: {{nexus_repository_url_worker}}/{{nexus_repo}}/{{name_app}}:{{docker_image_tag}}
   imagePullSecrets:
     - name: {{secret_name}}

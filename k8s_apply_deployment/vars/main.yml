@@ -4,7 +4,7 @@ docker_auth: "{{ (nexus_user + ':' + nexus_password) | b64encode }}"
 docker_config_json: |
   {
     "auths": {
-      "https://{{ nexus_repository_url }}":{
+      "https://{{ nexus_repository_url_worker }}":{
       "username":"{{ nexus_user }}",
       "password":"{{ nexus_password }}",
       "auth": "{{ docker_auth }}",
