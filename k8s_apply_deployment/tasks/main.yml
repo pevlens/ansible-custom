@@ -39,14 +39,6 @@
     name: "{{name_app}}"
   register: pod_info
 
-- name: Wait for Pod to become Running
-  retries: 10
-  delay: 10
-  register: pod_info
-  ignore_errors: false
-  until: pod_info.resources is defined and
-         pod_info.resources | length > 0 and
-         pod_info.resources[0].status.phase == "Running"
 - debug:
     msg: "Pod status: {{ pod_info.resources[0].status.phase }}"
 
