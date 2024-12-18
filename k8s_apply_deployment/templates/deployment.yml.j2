@@ -4,7 +4,7 @@ metadata:
   name: {{ name_app }}-deployment
   namespace: {{ namespace }}
 spec:
-  replicas: {{ replicas }}
+  replicas: "{{ replicas }}"
 
   minReadySeconds: {{minReadySeconds}}
 
