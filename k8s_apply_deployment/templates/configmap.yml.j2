@@ -4,6 +4,6 @@ metadata:
   name: {{name_app}}-configmap
   namespace: {{namespace}}
 data:
-    DEBUG: {{debug}}
+    DEBUG: "{{debug}}"
     DATABASE_HOST: db-service
-    DATABASE_PORT: {{dbport}}
+    DATABASE_PORT: "{{dbport}}"
