@@ -44,14 +44,16 @@
   register: job_result
 
 - name: Проверить статус выполнения Job
-  retries: 10
-  delay: 10
-  until: job_status.status.conditions[0].type == 'Complete' and job_status.status.conditions[0].status == 'True'
   kubernetes.core.k8s_info:
     kind: Job
     namespace: "{{ namespace }}"
     name: "{{name_app}}-job"
   register: job_status
+  until: job_status.status.conditions[0].type == 'Complete' and job_status.status.conditions[0].status == 'True'
+  retries: 10
+  delay: 10
+  
+ 
 
 - name: Проверить статус Job
   fail:
