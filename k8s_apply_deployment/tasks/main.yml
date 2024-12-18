@@ -24,37 +24,104 @@
       data:
         .dockerconfigjson: "{{ docker_config_json | to_json | b64encode }}"
 
-
-- name: Apply k8s pod
+#--------------------- ConfigMap --------------------------
+- name: Apply k8s ConfigMap
   kubernetes.core.k8s:
     kubeconfig: "{{ kubeconfig_path }}"
     state: present
-    definition: "{{ lookup('template', 'pod.yml.j2') }}"
+    definition: "{{ lookup('template', 'configmap.yml.j2') }}"
+    register: configmap_result
 
 
-- name: Get Pod details
-  kubernetes.core.k8s_info:
+#----------------------------------------------------------
+
+#------------------------ Job -----------------------------
+- name: Apply k8s job migrations and superuser 
+  kubernetes.core.k8s:
     kubeconfig: "{{ kubeconfig_path }}"
-    kind: Pod
-    namespace: "{{ namespace }}"
-    name: "{{name_app}}"
-  register: pod_info
-  until: pod_info.resources is defined and
-         pod_info.resources | length > 0 and
-         pod_info.resources[0].status.phase == "Running"
+    state: present
+    definition: "{{ lookup('template', 'job.yml.j2') }}"
+    register: job_result
+
+- name: Проверить статус выполнения Job
   retries: 10
   delay: 10
+  until: job_status.status.conditions[0].type == 'Complete' and job_status.status.conditions[0].status == 'True'
+  kubernetes.core.k8s_info:
+    kind: Job
+    namespace: "{{ namespace }}"
+    name: "{{name_app}}-job"
+  register: job_status
 
-- debug:
-    msg: "Pod status: {{ pod_info.resources[0].status.phase }}"
-
-
-
-- name: Final check for Pod status
+- name: Проверить статус Job
   fail:
-    msg: "Pod {{ name_app }} did not reach 'Running' state within the timeout. Current status: {{ pod_info.resources[0].status.phase }}"
-  when: pod_info.resources[0].status.phase != "Running"
+    msg: "Job завершился с ошибкой."
+    when: >
+      job_status.resources[0].status.conditions[0].type != 'Complete' or
+      job_status.resources[0].status.conditions[0].status != 'True'
 
-- name: Confirm Pod is Running
+- name: Confirm Job complite
   debug:
-    msg: "Pod {{ name_app }} is successfully running."
+    msg: "Job is successfully"
+
+#----------------------------------------------------------
+- name: Apply k8s deployment 
+  kubernetes.core.k8s:
+    kubeconfig: "{{ kubeconfig_path }}"
+    state: present
+    definition: "{{ lookup('template', 'deployment.yml.j2') }}"
+
+
+- name: Apply k8s service  
+  kubernetes.core.k8s:
+    kubeconfig: "{{ kubeconfig_path }}"
+    state: present
+    definition: "{{ lookup('template', 'service.yml.j2') }}"
+
+- name: Apply k8s endpoint to db 
+  kubernetes.core.k8s:
+    kubeconfig: "{{ kubeconfig_path }}"
+    state: present
+    definition: "{{ lookup('template', 'endpoint.yml.j2') }}"
+
+- name: Apply k8s ingress
+  kubernetes.core.k8s:
+    kubeconfig: "{{ kubeconfig_path }}"
+    state: present
+    definition: "{{ lookup('template', 'ingress.yml.j2') }}"
+
+#------------------------------------------------------------ POD test -------------------------------------------------------------------------------------------------------
+
+# - name: Apply k8s pod
+#   kubernetes.core.k8s:
+#     kubeconfig: "{{ kubeconfig_path }}"
+#     state: present
+#     definition: "{{ lookup('template', 'pod.yml.j2') }}"
+
+
+# - name: Get Pod details
+#   kubernetes.core.k8s_info:
+#     kubeconfig: "{{ kubeconfig_path }}"
+#     kind: Pod
+#     namespace: "{{ namespace }}"
+#     name: "{{name_app}}"
+#   register: pod_info
+#   until: pod_info.resources is defined and
+#          pod_info.resources | length > 0 and
+#          pod_info.resources[0].status.phase == "Running"
+#   retries: 10
+#   delay: 10
+
+# - debug:
+#     msg: "Pod status: {{ pod_info.resources[0].status.phase }}"
+
+
+
+# - name: Final check for Pod status
+#   fail:
+#     msg: "Pod {{ name_app }} did not reach 'Running' state within the timeout. Current status: {{ pod_info.resources[0].status.phase }}"
+#   when: pod_info.resources[0].status.phase != "Running"
+
+# - name: Confirm Pod is Running
+#   debug:
+#     msg: "Pod {{ name_app }} is successfully running."

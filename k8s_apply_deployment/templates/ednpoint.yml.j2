@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: db-service
+  namespace: {{ namespace }}
+
+subsets:
+  - addresses:
+    - ip: {{dbip}}
+  ports:
+  - port: {{dbport}}

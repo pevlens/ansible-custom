@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{name_app}}-job
+spec:
+  template:
+    spec:
+      containers:
+      - name: {{name_app}}-job
+        image: {{nexus_repository_url_worker}}/{{nexus_repo}}/{{name_app}}:{{docker_image_tag}}
+        command: ["/bin/bash", "-c"]
+        args:
+          - |
+            python manage.py makemigrations &&
+            python manage.py migrate &&
+            python manage.py createsuperuser --noinput --username admin --email admin@example.com --password admin
+            python manage.py create_categories
+        envFrom:
+        - secretRef:
+            name: django-secret
+        - configMapRef:
+            name: {{name_app}}-configmap
+      imagePullSecrets:
+        - name: {{secret_name}}
+      restartPolicy: OnFailure

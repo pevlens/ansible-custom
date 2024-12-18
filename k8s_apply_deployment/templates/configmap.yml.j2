@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{name_app}}-configmap
+  namespace: {{namespace}}
+data:
+    DEBUG: {{debug}}
+    DATABASE_HOST: db-service
+    DATABASE_PORT: {{dbport}}

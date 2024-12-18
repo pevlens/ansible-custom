@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{name_app}}-service
+  namespace: {{ namespace }}
+spec:
+  selector:
+    app: {{name_app}}
+  ports:
+    - name: httpsvcdj
+      port: 80
+      targetPort: httpdj
+
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-service
+  namespace: {{ namespace }}
+spec:
+  ports:
+    - name: db
+      port: {{dbport}}
+      targetPort: {{dbport}}

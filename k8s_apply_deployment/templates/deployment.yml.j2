@@ -1,20 +1,70 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ deployment_name }}
+  name: {{ name_app }}-deployment
   namespace: {{ namespace }}
 spec:
   replicas: {{ replicas }}
+
+  minReadySeconds: {{minReadySeconds}}
+
+  strategy:
+    rollingUpdate:
+      maxSurge: {{maxSurge}}
+      maxUnavailable: {{maxUnavailable}}
+    type: RollingUpdate
+
   selector:
     matchLabels:
-      app: {{ app_name }}
+      app: {{ name_app }}
+
   template:
     metadata:
       labels:
-        app: {{ app_name }}
+        app: {{ name_app }}
+
+
     spec:
       containers:
-      - name: {{ app_name }}
-        image: {{ image }}
-        ports:
-        - containerPort: 80
+      - name: {{ name_app }}
+        image:  {{nexus_repository_url_worker}}/{{nexus_repo}}/{{name_app}}:{{docker_image_tag}}
+        
+        resources:
+            limits:
+              memory: {{limit_memory}}
+              cpu: {{limit_cpu}}
+            requests:
+              memory: {{request_memory}}
+              cpu: {{request_cpu}}
+
+        envFrom:
+        - secretRef:
+            name: django-secret
+        - configMapRef:
+            name: {{name_app}}-configmap
+              
+        livenessProbe:
+          httpGet:
+              path: "/"
+              port: {{app_port}}
+          initialDelaySeconds: 20
+          periodSeconds: 5
+          timeoutSeconds: 5
+          failureThreshold: 5
+        readinessProbe:
+          httpGet:
+            path: "/"
+            port: {{app_port}}
+          initialDelaySeconds: 30
+          periodSeconds: 5
+          timeoutSeconds: 5
+          failureThreshold: 3
+
+      imagePullSecrets:
+        - name: {{secret_name}}
+      ports:
+      - name: httpdj
+        containerPort: {{app_port}}
+
+
+
