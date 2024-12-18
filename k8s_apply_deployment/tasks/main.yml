@@ -30,7 +30,7 @@
     kubeconfig: "{{ kubeconfig_path }}"
     state: present
     definition: "{{ lookup('template', 'configmap.yml.j2') }}"
-    register: configmap_result
+  register: configmap_result
 
 
 #----------------------------------------------------------
@@ -41,7 +41,7 @@
     kubeconfig: "{{ kubeconfig_path }}"
     state: present
     definition: "{{ lookup('template', 'job.yml.j2') }}"
-    register: job_result
+  register: job_result
 
 - name: Проверить статус выполнения Job
   retries: 10
