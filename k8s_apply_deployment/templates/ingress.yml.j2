@@ -5,11 +5,14 @@ metadata:
   namespace: {{namespace}}
   annotations:
     nginx.ingress.kubernetes.io/proxy-body-size: "3g"
+
 spec:
   ingressClassName: nginx
   tls:
-  - hosts: site.psn.by
+  - hosts:
+    - site.psn.by
     secretName: tls-nexus
+  rules:
     - host: site.psn.by
       http:
         paths:
@@ -20,4 +23,3 @@ spec:
               name: {{name_app}}-service
               port:
                 number: httpsvcdj
-

@@ -1,11 +1,14 @@
-apiVersion: v1
-kind: Endpoints
+apiVersion: discovery.k8s.io/v1
+kind: EndpointSlice
 metadata:
-  name: db-service
-  namespace: {{ namespace }}
-
-subsets:
+  name: db-service-1
+  labels:
+    kubernetes.io/service-name: db-service
+addressType: IPv4
+ports:
+  - name: dbpsg 
+    protocol: TCP
+    port: {{dbport}}
+endpoints:
   - addresses:
-      - ip: {{ dbip }}
-    ports:
-      - port: {{ dbport }}
+      - "{{dbip}}"
