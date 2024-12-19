@@ -33,7 +33,19 @@
   register: configmap_result
 
 
-#----------------------------------------------------------
+#----------------------SVC ENDPOINT DB-------------------------------
+
+- name: Apply k8s service  
+  kubernetes.core.k8s:
+    kubeconfig: "{{ kubeconfig_path }}"
+    state: present
+    definition: "{{ lookup('template', 'service.yml.j2') }}"
+
+- name: Apply k8s endpoint to db 
+  kubernetes.core.k8s:
+    kubeconfig: "{{ kubeconfig_path }}"
+    state: present
+    definition: "{{ lookup('template', 'endpoint.yml.j2') }}"
 
 #------------------------ Job -----------------------------
 - name: Apply k8s job migrations and superuser 
@@ -86,18 +98,6 @@
     state: present
     definition: "{{ lookup('template', 'deployment.yml.j2') }}"
 
-
-- name: Apply k8s service  
-  kubernetes.core.k8s:
-    kubeconfig: "{{ kubeconfig_path }}"
-    state: present
-    definition: "{{ lookup('template', 'service.yml.j2') }}"
-
-- name: Apply k8s endpoint to db 
-  kubernetes.core.k8s:
-    kubeconfig: "{{ kubeconfig_path }}"
-    state: present
-    definition: "{{ lookup('template', 'endpoint.yml.j2') }}"
 
 - name: Apply k8s ingress
   kubernetes.core.k8s:
