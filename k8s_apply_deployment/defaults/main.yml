@@ -6,7 +6,7 @@ secret_name: "nexus-docker-secret-2"
 nexus_repository_url_worker: "nexus.psn.by"
 dbip: 192.168.1.213
 dbport: 5432
-replicas: "3"
+replicas: 3
 app_port: 8000
 minReadySeconds: 30
 maxSurge: 1
