@@ -51,7 +51,7 @@
     namespace: "{{ namespace }}"
     name: "{{name_app}}-job"
   register: job_status 
-  until: job_status.status.conditions[1].type == 'Complete' and job_status.status.conditions[1].status == 'True'
+  until: job_status.resources[0].status.conditions[1].type != 'Complete' and  job_status.resources[0].status.conditions[1].status != 'True'
   retries: 10
   delay: 10
 
