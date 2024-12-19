@@ -28,7 +28,9 @@ spec:
       containers:
       - name: {{ name_app }}
         image:  {{nexus_repository_url_worker}}/{{nexus_repo}}/{{name_app}}:{{docker_image_tag}}
-        
+      - ports:
+          name: httpdj
+            containerPort: {{app_port}}
         resources:
             limits:
               memory: {{limit_memory}}
@@ -62,9 +64,7 @@ spec:
 
       imagePullSecrets:
         - name: {{secret_name}}
-      ports:
-      - name: httpdj
-        containerPort: {{app_port}}
+
 
 
 
