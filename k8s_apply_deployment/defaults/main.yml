@@ -11,9 +11,9 @@ app_port: 8000
 minReadySeconds: 30
 maxSurge: 1
 maxUnavailable: 1
-limit_memory: "700mi"
+limit_memory: "700Mi"
 limit_cpu: "1000m"
-request_memory: "500mi"
+request_memory: "500Mi"
 request_cpu: "500m"
 debug: "True"
 
