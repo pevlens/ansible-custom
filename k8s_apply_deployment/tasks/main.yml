@@ -45,7 +45,7 @@
 
 - debug:
     var: job_result 
-    
+
 - name: Проверить статус выполнения Job
   kubernetes.core.k8s_info:
     kubeconfig: "{{ kubeconfig_path }}"
@@ -53,9 +53,13 @@
     namespace: "{{ namespace }}"
     name: "{{name_app}}-job"
   register: job_status 
-  # until: job_status.resources[0].status.conditions[1].type != 'Complete' and  job_status.resources[0].status.conditions[1].status != 'True'
-  # retries: 10
-  # delay: 10
+  retries: 10
+  delay: 20
+  until: 
+    job_status.resources[0].status.conditions is defined and
+    job_status.resources[0].status.conditions[1].type != 'Complete' and  
+    job_status.resources[0].status.conditions[1].status != 'True'
+
 
 
 - debug:
