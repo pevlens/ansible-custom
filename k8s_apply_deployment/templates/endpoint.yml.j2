@@ -4,6 +4,7 @@ metadata:
   name: db-service-1
   labels:
     kubernetes.io/service-name: db-service
+  namespace: {{namespace}}
 addressType: IPv4
 ports:
   - name: dbpsg 
