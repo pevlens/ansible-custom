@@ -6,10 +6,10 @@ metadata:
     kubernetes.io/service-name: db-service
   namespace: {{namespace}}
 addressType: IPv4
+endpoints:
+  - addresses:
+      - "{{dbip}}"
 ports:
   - name: dbpsg 
     protocol: TCP
     port: {{dbport}}
-endpoints:
-  - addresses:
-      - "{{dbip}}"

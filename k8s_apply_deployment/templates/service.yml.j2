@@ -20,6 +20,7 @@ metadata:
   name: db-service
   namespace: {{ namespace }}
 spec:
+  clusterIP: None
   ports:
     - name: db
       port: {{dbport}}
