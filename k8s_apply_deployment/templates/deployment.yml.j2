@@ -44,7 +44,11 @@ spec:
             name: django-secret
         - configMapRef:
             name: {{name_app}}-configmap
-              
+        env:
+          - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP 
         livenessProbe:
           httpGet:
               path: "/"
