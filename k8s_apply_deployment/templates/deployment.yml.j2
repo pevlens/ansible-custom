@@ -63,9 +63,9 @@ spec:
           failureThreshold: 3
       env:
       - name: POD_IP
-          valueFrom:
-            fieldRef:
-              fieldPath: status.podIP 
+        valueFrom:
+          fieldRef:
+            fieldPath: status.podIP 
       imagePullSecrets:
         - name: {{secret_name}}
 
