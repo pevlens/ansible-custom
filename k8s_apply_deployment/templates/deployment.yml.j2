@@ -44,7 +44,11 @@ spec:
             name: django-secret
         - configMapRef:
             name: {{name_app}}-configmap
-     
+        env:
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP 
         livenessProbe:
           httpGet:
               path: "/"
@@ -61,11 +65,7 @@ spec:
           periodSeconds: 5
           timeoutSeconds: 5
           failureThreshold: 3
-      env:
-      - name: POD_IP
-        valueFrom:
-          fieldRef:
-            fieldPath: status.podIP 
+
       imagePullSecrets:
         - name: {{secret_name}}
 
