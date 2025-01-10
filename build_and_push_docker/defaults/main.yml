@@ -14,5 +14,5 @@ dockerfile_path: "."
 git_repo_url: "https://github.com/user/myapp.git"         # URL Git-репозитория
 git_version: "main"                                       # Ветка или тег для выкачивания (например, main, master, или версия v1.0)
 git_clone_dest: "."                                       # Путь, куда будет клонирован репозиторий
-ip_nexus: 192.168.1.241                                   # ip nexus
+ip_nexus: 192.168.1.201                                   # ip nexus
 hostname: "jenkins-worker"
