@@ -46,7 +46,7 @@
     dockerd --host=unix:///var/run/docker.sock > dockerd.log 2>&1 &
   register: dockerd_start
   changed_when: False
-  when: ansible_hostname == {{hostname}}
+  when: ansible_hostname != hostname
 
 # Логин в Nexus Docker registry
 - name: Login to Nexus Docker registry
