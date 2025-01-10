@@ -15,7 +15,7 @@
     owner: root
     group: root
     mode: '0755'
-  when: ansible_hostname != {{hostname}}
+  when: ansible_hostname != hostname
 
 
 
@@ -46,7 +46,7 @@
   register: dockerd_start
   changed_when: False
   when: ansible_hostname == {{hostname}}
-  
+
 # Логин в Nexus Docker registry
 - name: Login to Nexus Docker registry
   ansible.builtin.shell: |
