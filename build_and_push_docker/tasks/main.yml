@@ -37,8 +37,14 @@
     group: root
     mode: '0644'
   when: insecure_registries_check.rc != 0
-  notify:
-    - restart docker
+#  notify:
+#    - restart docker 
+
+- name: restart docker
+  ansible.builtin.systemd:
+    name: docker
+    state: restarted
+  when: ansible_hostname == hostname
 
 
 - name: Dockerd start
