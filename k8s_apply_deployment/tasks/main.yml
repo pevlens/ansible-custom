@@ -55,8 +55,6 @@
     definition: "{{ lookup('template', 'job.yml.j2') }}"
   register: job_result
 
-- debug:
-    var: job_result 
 
 - name: Проверить статус выполнения Job
   kubernetes.core.k8s_info:
@@ -77,33 +75,27 @@
 - debug:
     var: job_status 
   
-# - debug:
-#     var: job_result 
+- name: Delete k8s job migrations and superuser 
+  kubernetes.core.k8s:
+    kubeconfig: "{{ kubeconfig_path }}"
+    state: absent
+    definition: "{{ lookup('template', 'job.yml.j2') }}"
 
-# - name: Проверить статус Job
-#   fail:
-#     msg: "Job завершился с ошибкой."
-#     when: >
-#       job_status.resources[0].status.conditions[0].type != 'Complete' or
-#       job_status.resources[0].status.conditions[0].status != 'True'
-
-# - name: Confirm Job complite
-#   debug:
-#     msg: "Job is successfully"
-
-#----------------------------------------------------------
+#------------------------------Deployment ----------------------------
 - name: Apply k8s deployment 
   kubernetes.core.k8s:
     kubeconfig: "{{ kubeconfig_path }}"
     state: present
     definition: "{{ lookup('template', 'deployment.yml.j2') }}"
 
-
+#------------------------------ Ingress ----------------------------
 - name: Apply k8s ingress
   kubernetes.core.k8s:
     kubeconfig: "{{ kubeconfig_path }}"
     state: present
     definition: "{{ lookup('template', 'ingress.yml.j2') }}"
+
+
 
 #------------------------------------------------------------ POD test -------------------------------------------------------------------------------------------------------
 

@@ -1,6 +1,13 @@
 ---
 # tasks file for build_and_push_docker
 
+- name: add line {{ip_nexus}}  {{ nexus_repository_url }} in /etc/hosts
+  lineinfile:
+    path: /etc/hosts
+    line: "{{ip_nexus}} {{ nexus_repository_url }}"
+    create: yes  
+    state: present 
+
 - name: Ensure /etc/docker directory exists
   ansible.builtin.file:
     path: /etc/docker
@@ -8,6 +15,15 @@
     owner: root
     group: root
     mode: '0755'
+  when: ansible_hostname != {{hostname}}
+
+
+
+- name: Проверить наличие строки "insecure-registries" в /etc/docker/daemon.json
+  ansible.builtin.shell: >
+    grep -q '"insecure-registries": \["{{ nexus_repository_url }}", "{{ nexus_repository_url }}:443"\]' /etc/docker/daemon.json
+  register: insecure_registries_check
+
 
 - name: Configure Docker daemon.json for insecure registry
   ansible.builtin.copy:
@@ -19,12 +35,18 @@
     owner: root
     group: root
     mode: '0644'
+  when: insecure_registries_check.rc != 0
+  notify:
+    - restart docker
+
 
 - name: Dockerd start
   ansible.builtin.shell: |
     dockerd --host=unix:///var/run/docker.sock > dockerd.log 2>&1 &
   register: dockerd_start
   changed_when: False
+  when: ansible_hostname == {{hostname}}
+  
 # Логин в Nexus Docker registry
 - name: Login to Nexus Docker registry
   ansible.builtin.shell: |

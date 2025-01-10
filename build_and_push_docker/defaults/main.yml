@@ -4,13 +4,15 @@
 docker_image_name: "myapp"
 docker_image_tag: "latest"
 
-# Настройки Nexus
-nexus_repository_url: "{{ lookup('env', 'NEXUSURI') }}"     # URL вашего Nexus репозитория
+#------------------------------ Настройки Nexus -------------------------------------------------------------------
+nexus_repository_url: "{{ lookup('env', 'NEXUSURI') }}"   # URL вашего Nexus репозитория
 nexus_user: "{{ lookup('env', 'NEXUSUSER') }}"            # Имя пользователя Nexus
 nexus_password: "{{ lookup('env', 'NEXUSPASS') }}"        # Пароль от Nexus
-nexus_repo: "docker"                   # Имя репозитория в Nexus
+nexus_repo: "docker"                                      # Имя репозитория в Nexus
 dockerfile_path: "."
-# Настройки Git
-git_repo_url: "https://github.com/user/myapp.git"  # URL Git-репозитория
-git_version: "main"                                # Ветка или тег для выкачивания (например, main, master, или версия v1.0)
-git_clone_dest: "."                       # Путь, куда будет клонирован репозиторий
+#--------------------------------- Настройки Git ------------------------------------------------------------------
+git_repo_url: "https://github.com/user/myapp.git"         # URL Git-репозитория
+git_version: "main"                                       # Ветка или тег для выкачивания (например, main, master, или версия v1.0)
+git_clone_dest: "."                                       # Путь, куда будет клонирован репозиторий
+ip_nexus: 192.168.1.241                                   # ip nexus
+hostname: "jenkins-worker"
