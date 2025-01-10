@@ -19,10 +19,11 @@
 
 
 
-- name: Проверить наличие строки "insecure-registries" в /etc/docker/daemon.json
+- name: Check string insecure-registries in file /etc/docker/daemon.json
   ansible.builtin.shell: >
     grep -q '"insecure-registries": \["{{ nexus_repository_url }}", "{{ nexus_repository_url }}:443"\]' /etc/docker/daemon.json
   register: insecure_registries_check
+  ignore_errors: true
 
 
 - name: Configure Docker daemon.json for insecure registry
