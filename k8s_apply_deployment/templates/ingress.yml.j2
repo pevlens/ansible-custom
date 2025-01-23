@@ -11,9 +11,21 @@ spec:
   tls:
   - hosts:
     - site.psn.by
+    - site.psncorp.ru
     secretName: tls-nexus
   rules:
     - host: site.psn.by
+      http:
+        paths:
+        - path: "/"
+          pathType: Prefix
+          backend:
+            service:
+              name: {{name_app}}-service
+              port:
+                name: httpsvcdj
+
+    - host: site.psncorp.ru
       http:
         paths:
         - path: "/"
