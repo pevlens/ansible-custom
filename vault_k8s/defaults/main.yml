@@ -1,2 +1,3 @@
 ---
 # defaults file for vault_k8s
+kubeconfig_path: "/etc/kube/config/config"
