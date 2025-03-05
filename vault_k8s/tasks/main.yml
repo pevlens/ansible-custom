@@ -1,0 +1,57 @@
+---
+# tasks file for vault_k8s
+- name: Создать Namespace
+  kubernetes.core.k8s:
+    name: "{{ vault_namespace }}"
+    api_version: v1
+    kind: Namespace
+    state: present
+
+- name: Создать ServiceAccount для приложения
+  kubernetes.core.k8s:
+    state: present
+    namespace: "{{ vault_namespace }}"
+    definition: "{{ lookup('template', 'templates/vault-service-account.yaml.j2') | from_yaml }}"
+
+
+- name: Создать Role для Vault Auth
+  kubernetes.core.k8s:
+    state: present
+    namespace: "{{ vault_namespace }}"
+    definition: "{{ lookup('template', 'templates/vault-role.yaml.j2') | from_yaml }}"
+
+- name: Создать RoleBinding для Vault Auth
+  kubernetes.core.k8s:
+    state: present
+    namespace: "{{ vault_namespace }}"
+    definition: "{{ lookup('template', 'templates/vault-rolebinding.yaml.j2') | from_yaml }}"
+
+
+
+- name: Создать ConfigMap
+  kubernetes.core.k8s:
+    state: present
+    namespace: "{{ vault_namespace }}"
+    definition: "{{ lookup('template', 'templates/vault-config.yaml.j2') | from_yaml }}"
+
+
+
+- name: Создать StatefulSet
+  kubernetes.core.k8s:
+    state: present
+    namespace: "{{ vault_namespace }}"
+    definition: "{{ lookup('template', 'templates/vault-statefulset.yaml.j2') | from_yaml }}"
+
+- name: Создать Service
+  kubernetes.core.k8s:
+    state: present
+    namespace: "{{ vault_namespace }}"
+    definition: "{{ lookup('template', 'templates/vault-service.yaml.j2') | from_yaml }}"
+
+
+- name: Создать Ingress
+  kubernetes.core.k8s:
+    state: present
+    namespace: "{{ vault_namespace }}"
+    definition: "{{ lookup('template', 'templates/vault_ingress.yaml.j2') | from_yaml }}"
+

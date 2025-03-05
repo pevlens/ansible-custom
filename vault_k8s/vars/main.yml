@@ -1,0 +1,5 @@
+---
+# vars file for vault_k8s
+vault_namespace: vault
+vault_replicas: 3
+vault_app_service_account: my-fish-yariki-sa

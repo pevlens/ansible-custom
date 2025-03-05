@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: vault
+  namespace: {{ vault_namespace }}
+spec:
+  serviceName: "vault"
+  replicas: {{ vault_replicas }}
+  selector:
+    matchLabels:
+      app: vault
+  template:
+    metadata:
+      labels:
+        app: vault
+    spec:
+      serviceAccountName: vault
+      containers:
+      - name: vault
+        image: hashicorp/vault:latest
+        args:
+          - "server"
+          - "-config=/vault/config/vault.hcl"
+        volumeMounts:
+          - name: config
+            mountPath: /vault/config
+          - name: data
+            mountPath: /vault/data
+      volumes:
+      - name: config
+        configMap:
+          name: vault-config
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 1Gi

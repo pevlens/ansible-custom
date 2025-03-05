@@ -4,6 +4,7 @@
   roles:
     - {role: build_and_push_docker, tags: build}
     - {role: k8s_apply_deployment, tags: deploy}
+    - {role: vault_k8s, tags: vault_deploy}
   vars:
     docker_image_name: "myapp"                     # Имя Docker-образа
     docker_image_tag: "v27"                       # Тег Docker-образа
