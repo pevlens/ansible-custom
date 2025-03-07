@@ -4,9 +4,16 @@ metadata:
   name: vault
   namespace: {{ vault_namespace }}
 spec:
+  clusterIP: None
+
   ports:
     - name: http
       port: 8200
       targetPort: 8200
+      
+    - name: cluster
+      port: 8201
+      targetPort: 8201
+
   selector:
     app: vault

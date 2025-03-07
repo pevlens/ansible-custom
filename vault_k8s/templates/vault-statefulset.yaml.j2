@@ -21,6 +21,13 @@ spec:
         args:
           - "server"
           - "-config=/vault/config/vault.hcl"
+        env:
+        - name: HOSTNAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: SKIP_CHOWN
+          value: "true"
         volumeMounts:
           - name: config
             mountPath: /vault/config

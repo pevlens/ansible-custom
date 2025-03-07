@@ -7,10 +7,16 @@ data:
   vault.hcl: |
     storage "raft" {
       path = "/vault/data"
-      node_id = "vault-1"
+      node_id = "${NODE_ID}"
+      auto_join = "provider=k8s label_selector=\"app.kubernetes.io/instance=vault\""
+      auto_join_scheme = "http"
     }
     listener "tcp" {
       address     = "0.0.0.0:8200"
+      cluster_address:  "0.0.0.0:8201",
       tls_disable = true
     }
+    cluster_addr = "http://$(HOSTNAME).vault-internal:8201"
+    api_addr = "http://$(HOSTNAME).vault-internal:8200"
+    disable_mlock = true
     ui = true
